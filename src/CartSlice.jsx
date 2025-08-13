@@ -18,17 +18,18 @@ export const CartSlice = createSlice({
           state.items.push({ name, image, cost, quantity: 1 });
         }
       },
-    removeItem: (name, quantity) => {
-        const { name, quantity } = action.payload; // Destructure the product name and new quantity from the action payload
-
+    removeItem: (state, action) => {
+        const { name, quantity } = action.payload; 
+        const index = state.items.findIndex(item => item.name === name);
+        state.items.splice(index,1)
+        state.quantity -= quantity;
     },
-    updateQuantity: (name, quantity) => {
-// Find the item in the cart that matches the given name
-const itemToUpdate = state.items.find(item => item.name === name);
-if (itemToUpdate) {
-  itemToUpdate.quantity = quantity; // If the item is found, update its quantity to the new value
-}
-    
+    updateQuantity: (state, action) => {
+        const { name, quantity } = action.payload;
+        const itemToUpdate = state.items.find(item => item.name === name);
+        if (itemToUpdate) {
+            itemToUpdate.quantity = quantity; 
+        }
     },
   },
 });
